@@ -2,7 +2,9 @@ package com.sl.belligerent.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sl.belligerent.GameCore;
@@ -27,6 +29,15 @@ public class MenuScene extends Scene {
 			if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 				Gdx.app.exit();
 			}
+			if(Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+				isScenePaused = true;
+			}
+		}
+		else
+		{
+			if(Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+				isScenePaused = false;
+			}
 		}
 	}
 
@@ -38,9 +49,13 @@ public class MenuScene extends Scene {
 
 	@Override
 	public void render(SpriteBatch sb) {
+		if(isScenePaused) sb.setColor(0.5f, 0.5f, 0.5f, 1.0f);
+		else sb.setColor(1f, 1f, 1f, 1f);
+		
 		sb.begin();
 		
-		sb.draw(background.getTexture(), 0, 0);
+		Texture bgTexture = background.getTexture();
+		sb.draw(bgTexture, 0, 0);
 		
 		sb.end();
 	}

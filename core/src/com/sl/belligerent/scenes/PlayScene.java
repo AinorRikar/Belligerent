@@ -3,6 +3,8 @@ package com.sl.belligerent.scenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.sl.belligerent.GameCore;
+import com.sl.belligerent.core.textures.CommonTexture;
 
 public class PlayScene extends Scene {
 
@@ -27,7 +29,21 @@ public class PlayScene extends Scene {
 
 	@Override
 	public void render(SpriteBatch sb) {
-		ScreenUtils.clear(1, 0, 0, 1);
+		
+		if(isScenePaused) sb.setColor(0.5f, 0.5f, 0.5f, 1.0f);
+		else sb.setColor(1f, 1f, 1f, 1f);
+		
+		sb.begin();
+		for(int i = 0; i * GameCore.DEF_SIZE < GameCore.WIDTH; i++)
+		{
+			for(int j = 0; j * GameCore.DEF_SIZE < GameCore.HEIGHT; j++)
+			{
+				CommonTexture tex = new CommonTexture("Textures/Sprites/stone_brick.png", GameCore.DEF_SIZE, GameCore.DEF_SIZE);
+				sb.draw(tex.getTexture(), i * GameCore.DEF_SIZE, j * GameCore.DEF_SIZE);
+			}
+		}
+
+		sb.end();
 	}
 
 	@Override

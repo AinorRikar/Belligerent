@@ -11,6 +11,7 @@ import com.sl.belligerent.scenes.SceneManager;
 public class GameCore extends ApplicationAdapter {
 	public static final int WIDTH = 1920;
 	public static final int HEIGHT = 1080;
+	public static final int DEF_SIZE = 64;
 	
 	public static final String TITLE = "Belligerent";
 	
@@ -28,6 +29,8 @@ public class GameCore extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		ScreenUtils.clear(0, 0, 0, 1);
+		
 		sceneManager.update(Gdx.graphics.getDeltaTime());
 		sceneManager.render(batch);
 	}
