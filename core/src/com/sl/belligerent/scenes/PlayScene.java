@@ -1,9 +1,5 @@
 package com.sl.belligerent.scenes;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -41,8 +37,18 @@ public class PlayScene extends Scene {
 			manager.set(new MenuScene(manager));
 		}
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)) {
-			pouCords.x = Gdx.input.getX() - 32;
-			pouCords.y = GameCore.HEIGHT - Gdx.input.getY() - 32;
+			
+			float centerX = GameCore.WIDTH / 2;
+			float centerY = GameCore.HEIGHT / 2;
+			
+			float sX = Gdx.input.getX() - centerX;
+			float sY = Gdx.input.getY() - centerY;
+			
+			sX *= camera.getZoom();
+			sY *= camera.getZoom();
+			
+			pouCords.x = centerX + sX - 32;
+			pouCords.y = GameCore.HEIGHT - sY - centerY - 32;
 		}
 		if(Gdx.input.isKeyPressed(Keys.EQUALS)) {
 			camera.zoom(0.01f);

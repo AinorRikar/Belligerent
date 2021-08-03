@@ -19,6 +19,10 @@ public class CommonCamera {
 		camera.zoom = zoom;
 	}
 	
+	public float getZoom() {
+		return camera.zoom;
+	}
+	
 	public void setPos(float x, float y, float z) {
 		camera.position.set(x, y, z);
 	}
