@@ -3,6 +3,7 @@ package com.sl.belligerent.scenes;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.sl.belligerent.GameCore;
 
 public abstract class Scene {
 	protected OrthographicCamera camera;
@@ -13,6 +14,7 @@ public abstract class Scene {
 	{
 		this.manager = manager;
 		camera = new OrthographicCamera();
+		camera.setToOrtho(false, GameCore.WIDTH, GameCore.HEIGHT);
 		mouse = new Vector3();
 	}
 	

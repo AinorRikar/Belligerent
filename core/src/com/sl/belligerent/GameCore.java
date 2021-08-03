@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.sl.belligerent.scenes.MenuScene;
 import com.sl.belligerent.scenes.SceneManager;
 
 public class GameCore extends ApplicationAdapter {
@@ -22,7 +23,8 @@ public class GameCore extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		sceneManager = new SceneManager();
 		
-		ScreenUtils.clear(1, 0, 0, 1);
+		MenuScene mainMenu = new MenuScene(sceneManager);
+		sceneManager.push(mainMenu);
 	}
 
 	@Override
