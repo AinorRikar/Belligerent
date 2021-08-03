@@ -10,6 +10,8 @@ public abstract class Scene {
 	protected Vector3 mouse;
 	protected SceneManager manager;
 	
+	protected boolean isScenePaused = false;
+	
 	public Scene(SceneManager manager)
 	{
 		this.manager = manager;

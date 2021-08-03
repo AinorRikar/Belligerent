@@ -1,6 +1,7 @@
 package com.sl.belligerent.scenes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -19,20 +20,24 @@ public class MenuScene extends Scene {
 
 	@Override
 	protected void handleInput() {
-		// TODO Auto-generated method stub
-		
+		if(!isScenePaused) {
+			if(Gdx.input.justTouched()) {
+				manager.set(new PlayScene(manager));
+			}
+			if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+				Gdx.app.exit();
+			}
+		}
 	}
 
 	@Override
 	public void update(float dt) {
 		// TODO Auto-generated method stub
-		
+		handleInput();
 	}
 
 	@Override
 	public void render(SpriteBatch sb) {
-		ScreenUtils.clear(1, 0, 0, 1);
-		
 		sb.begin();
 		
 		sb.draw(background.getTexture(), 0, 0);

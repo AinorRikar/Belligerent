@@ -23,8 +23,7 @@ public class GameCore extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		sceneManager = new SceneManager();
 		
-		MenuScene mainMenu = new MenuScene(sceneManager);
-		sceneManager.push(mainMenu);
+		sceneManager.push(new MenuScene(sceneManager));
 	}
 
 	@Override
