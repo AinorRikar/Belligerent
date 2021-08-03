@@ -1,11 +1,17 @@
 package com.sl.belligerent.scenes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.loaders.ShaderProgramLoader;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sl.belligerent.GameCore;
 import com.sl.belligerent.core.textures.CommonTexture;
@@ -39,6 +45,7 @@ public class MenuScene extends Scene {
 				isScenePaused = false;
 			}
 		}
+			
 	}
 
 	@Override
@@ -49,6 +56,10 @@ public class MenuScene extends Scene {
 
 	@Override
 	public void render(SpriteBatch sb) {
+		
+		camera.update();
+		sb.setProjectionMatrix(camera.getCamera().combined);
+		
 		if(isScenePaused) sb.setColor(0.5f, 0.5f, 0.5f, 1.0f);
 		else sb.setColor(1f, 1f, 1f, 1f);
 		
