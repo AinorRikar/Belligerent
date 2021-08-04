@@ -13,21 +13,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sl.belligerent.GameCore;
 import com.sl.belligerent.core.textures.CommonTexture;
+import com.sl.belligerent.core.world.MapManager;
 
 public class PlayScene extends Scene {
 
 	private TextureAtlas atlas;
-	
-	private CommonTexture pou;
-	private Vector2 pouCords;
 	
 	public PlayScene(SceneManager manager) {
 		super(manager);
 
 		atlas = new TextureAtlas("Textures/Atlas/ground.atlas");
 		
-		pou = new CommonTexture("Textures/Sprites/Units/pou.png", 64, 64);
-		pouCords = new Vector2(0, 0);
+		MapManager.createLevel("Maps/desert.tmx");
 	}
 
 	@Override
@@ -46,9 +43,6 @@ public class PlayScene extends Scene {
 			
 			sX *= camera.getZoom();
 			sY *= camera.getZoom();
-			
-			pouCords.x = centerX + sX - 32;
-			pouCords.y = GameCore.HEIGHT - sY - centerY - 32;
 		}
 		if(Gdx.input.isKeyPressed(Keys.EQUALS)) {
 			camera.zoom(0.01f);
@@ -58,6 +52,18 @@ public class PlayScene extends Scene {
 		}
 		if(Gdx.input.isKeyJustPressed(Keys.BACKSPACE)) {
 			camera.setZoom(1f);
+		}
+		if(Gdx.input.isKeyPressed(Keys.LEFT)) {
+			camera.translate(new Vector2(-5, 0));
+		}
+		if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
+			camera.translate(new Vector2(5, 0));
+		}
+		if(Gdx.input.isKeyPressed(Keys.DOWN)) {
+			camera.translate(new Vector2(0, -5));
+		}
+		if(Gdx.input.isKeyPressed(Keys.UP)) {
+			camera.translate(new Vector2(0, 5));
 		}
 	}
 
@@ -77,7 +83,7 @@ public class PlayScene extends Scene {
 		else sb.setColor(1f, 1f, 1f, 1f);
 		
 		sb.begin();
-		for(int i = 0; i * GameCore.DEF_SIZE < GameCore.WIDTH; i++)
+		/*for(int i = 0; i * GameCore.DEF_SIZE < GameCore.WIDTH; i++)
 		{
 			for(int j = 0; j * GameCore.DEF_SIZE < GameCore.HEIGHT; j++)
 			{
@@ -85,9 +91,9 @@ public class PlayScene extends Scene {
 				Sprite s = new Sprite(a);
 				sb.draw(s, i*64, j*64);
 			}
-		}
+		}*/
 		
-		sb.draw(pou.getTexture(), pouCords.x, pouCords.y);
+		MapManager.render(sb, camera.getCamera());
 
 		sb.end();
 	}
