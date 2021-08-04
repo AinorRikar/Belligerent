@@ -13,7 +13,7 @@ public class CommonCamera {
 	}
 	
 	public void zoom(float zoom) {
-		if(zoom > 0 && camera.zoom >= 0.4 || zoom < 0 && camera.zoom <= 3) camera.zoom -= zoom;
+		if(zoom > 0 && camera.zoom >= 0.5 || zoom < 0 && camera.zoom <= 2) camera.zoom -= zoom;
 	}
 	
 	public void setZoom(float zoom) {
