@@ -18,27 +18,38 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sl.belligerent.GameCore;
+import com.sl.belligerent.core.hordes.CommonHorde;
 import com.sl.belligerent.core.textures.CommonTexture;
 import com.sl.belligerent.core.units.CommonUnit;
 import com.sl.belligerent.core.units.MovableUnit;
-import com.sl.belligerent.core.world.MapManager;
+import com.sl.belligerent.core.world.Map;
 
 public class PlayScene extends Scene {
 
 	MovableUnit unit;
 	CommonUnit selected;
+	Map map;
 	
 	String s;
+	
+	CommonHorde horde;
 	
 	public PlayScene(GameCore game) {
 		super(game);
 		// TODO Auto-generated constructor stub
-		MapManager.createLevel("Maps/BasicVillage.tmx");
+		map = new Map();
+		map.createLevel("Maps/BasicVillage.tmx", camera.getCamera());
+		
+		horde = new CommonHorde();
 		
 		s = "Null";
 		
 		unit = new MovableUnit(new CommonTexture("Textures/Sprites/Units/pou.png", 64, 64), 2f);
-		stage.addActor(unit);
+		
+		horde.units.addActor(unit);
+		
+		stage.addActor(map);
+		stage.addActor(horde.units);
 		
 		stage.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
@@ -92,15 +103,14 @@ public class PlayScene extends Scene {
         //game.batch.setProjectionMatrix(camera.getCamera().combined);
         
         update(delta);
+        
+        stage.draw();
 
         batch.begin();
         
-        MapManager.render(batch, camera.getCamera());
         game.fontSmall.draw(batch, s, 50, 50);
         
         batch.end();
-        
-        stage.draw();
 	}
 	
 	

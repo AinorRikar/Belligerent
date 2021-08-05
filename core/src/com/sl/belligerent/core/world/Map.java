@@ -2,6 +2,7 @@ package com.sl.belligerent.core.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
@@ -13,25 +14,36 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class MapManager { 
-	static TiledMap map;
-	static OrthogonalTiledMapRenderer renderer;
+public class Map extends Actor { 
+	protected TiledMap map;
+	protected OrthogonalTiledMapRenderer renderer;
+	protected OrthographicCamera cam;
 	
-	public static void createLevel(String path)
+	public Map() {
+		super();
+	}
+	
+	public void createLevel(String path, OrthographicCamera cam)
 	{
 		map = new TmxMapLoader().load(path);
 		renderer = new OrthogonalTiledMapRenderer(map, 1/1f);
+		this.cam = cam;
 	}
-	public static void update() {    
+	
+	public void update() {    
 		
 	}
-	public static void render(SpriteBatch sb, OrthographicCamera cam)
+	
+	@Override
+	public void draw(Batch sb, float parentAlpha)
 	{
 		renderer.setView(cam);
 		renderer.render();
 	}
-	public static TiledMap getMap() {
+	
+	public TiledMap getMap() {
 		return map;
 	}
 }
