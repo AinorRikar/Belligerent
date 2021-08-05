@@ -44,5 +44,18 @@ public class CommonCamera {
 		this.camera = camera;
 	}
 	
+	public Vector2 getWorldPosFromCamera(float x, float y) {
+		float camX = camera.position.x;
+		float camY = camera.position.y;
+		
+		float centerX = GameCore.WIDTH / 2;
+		float centerY = GameCore.HEIGHT / 2;
+		
+		float deltaX = camX - centerX;
+		float deltaY = camY - centerY;
+		
+		return new Vector2(x + deltaX, y + deltaY);
+	}
+	
 	
 }

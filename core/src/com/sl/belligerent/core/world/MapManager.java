@@ -31,4 +31,7 @@ public class MapManager {
 		renderer.setView(cam);
 		renderer.render();
 	}
+	public static TiledMap getMap() {
+		return map;
+	}
 }

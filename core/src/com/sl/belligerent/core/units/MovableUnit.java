@@ -2,6 +2,7 @@ package com.sl.belligerent.core.units;
 
 import java.util.Random;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.sl.belligerent.core.textures.CommonTexture;
 
@@ -18,6 +19,14 @@ public class MovableUnit extends CommonUnit{
 	protected float speed;
 	protected Vector2 dest, dir;
 	
+	protected float moral;
+	protected float hunger;
+	protected float stamina;
+	
+	protected float str;
+	protected float ag;
+	protected float in;
+	
 	public MovableUnit(CommonTexture texture, float speed) {
 		super(texture);
 		dest = new Vector2(0, 0);
@@ -26,7 +35,7 @@ public class MovableUnit extends CommonUnit{
 	}
 
 	@Override
-	public void spawn(int minX, int minY, int maxX, int maxY) {
+	public void spawn(int minX, int minY, int maxX, int maxY, TiledMapTileLayer layer) {
 		// TODO Auto-generated method stub
 		Random random = new Random();
 		int x = minX + random.nextInt(maxX - minX);
@@ -50,9 +59,6 @@ public class MovableUnit extends CommonUnit{
 		else if(state >= 1 && state <= 4) {
 			move(dt, dest);
 		}
-		System.out.println("Pos: " + pos.x + ":" + pos.y + " Dest: " + dest.x + ":" + dest.y);
-		System.out.println("State: " + state);
-		System.out.println("Dir: " + dir.x + ":" + dir.y);
 	}
 	
 	protected void randomMove(float dt) {
