@@ -18,63 +18,77 @@ import com.sl.belligerent.core.textures.CommonTexture;
 
 public class MenuScene extends Scene {
 
-	private CommonTexture background;
-	
-	public MenuScene(SceneManager manager) {
-		super(manager);
-		
-		background = new CommonTexture("Textures/Backgrounds/bg.png", GameCore.WIDTH, GameCore.HEIGHT);
+	public MenuScene(GameCore game) {
+		super(game);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	protected void handleInput() {
-		if(!isScenePaused) {
-			if(Gdx.input.justTouched()) {
-				manager.set(new PlayScene(manager));
-			}
-			if(Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-				Gdx.app.exit();
-			}
-			if(Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-				isScenePaused = true;
-			}
-		}
-		else
-		{
-			if(Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-				isScenePaused = false;
-			}
-		}
-			
-	}
-
-	@Override
-	public void update(float dt) {
+	public void show() {
 		// TODO Auto-generated method stub
-		handleInput();
+		
 	}
 
 	@Override
-	public void render(SpriteBatch sb) {
+	public void handleInput() {
+		// TODO Auto-generated method stub
+		if(Gdx.input.justTouched()) {
+			game.setScreen(new PlayScene(game));
+		}
+	}
+
+	@Override
+	public void update(float delta) {
+		// TODO Auto-generated method stub
 		
-		camera.update();
-		sb.setProjectionMatrix(camera.getCamera().combined);
+	}
+
+	@Override
+	public void render(float delta) {
+		// TODO Auto-generated method stub
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        handleInput();
+        
+        camera.update();
+        game.batch.setProjectionMatrix(camera.getCamera().combined);
+
+        batch.begin();
+        
+        game.fontMain.draw(batch, "BELLIGERENT", 100, game.HEIGHT - 100);
+        game.fontSmall.draw(batch, "Click anywhere to start!", 100, game.HEIGHT - 200);
+        
+        batch.end();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
 		
-		if(isScenePaused) sb.setColor(0.5f, 0.5f, 0.5f, 1.0f);
-		else sb.setColor(1f, 1f, 1f, 1f);
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
 		
-		sb.begin();
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
 		
-		Texture bgTexture = background.getTexture();
-		sb.draw(bgTexture, 0, 0);
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
 		
-		sb.end();
 	}
 
 	@Override
 	public void dispose() {
-		background.dispose();
+		// TODO Auto-generated method stub
+		
 	}
-
-	
 }

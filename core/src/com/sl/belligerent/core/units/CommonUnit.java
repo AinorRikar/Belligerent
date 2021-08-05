@@ -1,11 +1,13 @@
 package com.sl.belligerent.core.units;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.sl.belligerent.core.textures.CommonTexture;
 
-public abstract class CommonUnit {
+public abstract class CommonUnit extends Actor{
 	protected Vector2 pos;
 	protected CommonTexture texture;
 	public int state;
@@ -26,11 +28,19 @@ public abstract class CommonUnit {
 		return new Vector2(pos.x, pos.y);
 	}
 	
-	public void render(SpriteBatch sb) {
-		sb.draw(texture.getTexture(), getMapPos().x, getMapPos().y);
+	@Override
+	public void draw(Batch sb, float parentAlpha) {
+		sb.setColor(1, 1, 1, parentAlpha);
+		sb.draw(texture.getTexture(), getX(), getY());
 	}
 	
-	public abstract void spawn(int minX, int minY, int maxX, int maxY, TiledMapTileLayer layer);
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		update(delta);
+	}
+	
+	public abstract void spawn(int minX, int minY, int maxX, int maxY);
 	
 	public abstract void update(float dt);
 }

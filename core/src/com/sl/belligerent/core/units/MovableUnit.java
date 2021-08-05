@@ -4,6 +4,9 @@ import java.util.Random;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sl.belligerent.core.textures.CommonTexture;
 
 public class MovableUnit extends CommonUnit{
@@ -32,15 +35,18 @@ public class MovableUnit extends CommonUnit{
 		dest = new Vector2(0, 0);
 		dir = new Vector2(0, 0);
 		this.speed = speed;
+		spawn(0, 0, 5, 5);
 	}
 
 	@Override
-	public void spawn(int minX, int minY, int maxX, int maxY, TiledMapTileLayer layer) {
+	public void spawn(int minX, int minY, int maxX, int maxY) {
 		// TODO Auto-generated method stub
 		Random random = new Random();
 		int x = minX + random.nextInt(maxX - minX);
 		int y = minY + random.nextInt(maxY - minY);
 		pos = new Vector2(x, y);
+		setPosition(x * 32, y * 32);
+		setSize(64, 64);
 	}
 
 	@Override
@@ -63,7 +69,7 @@ public class MovableUnit extends CommonUnit{
 	
 	protected void randomMove(float dt) {
 		Random random = new Random();
-		state = random.nextInt(3) + 1;
+		state = random.nextInt(4) + 1;
 		switch (state) {
 		case 1:
 			dest.y = 1;
@@ -118,5 +124,6 @@ public class MovableUnit extends CommonUnit{
 			this.dest.x = 0;
 			this.dest.y = 0;
 		}
+		setPosition(pos.x * 32, pos.y * 32);
 	}
 }
