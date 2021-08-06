@@ -16,6 +16,7 @@ public class StaticUnit extends CommonUnit{
 		super(texture, name);
 		// TODO Auto-generated constructor stub
 		this.isMain = isMain;
+		setSize(192, 192);
 		spawn(0, 0, (int) MapManager.getCurrentMapSize().x, (int) MapManager.getCurrentMapSize().y);
 	}
 
@@ -30,7 +31,6 @@ public class StaticUnit extends CommonUnit{
 		pos = new Vector2(x, y);
 		
 		setPosition(x * 32, y * 32);
-		setSize(192, 192);
 	}
 
 	@Override

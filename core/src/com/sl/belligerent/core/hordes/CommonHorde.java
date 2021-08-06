@@ -28,7 +28,6 @@ public class CommonHorde {
 		
 		for (int i = 0; i < countOfUnits; i++) {
 			MovableUnit unit = new MovableUnit(new MultiTexture("Textures/Sprites/Units/Mummai.png", 128, 128), "Mummai", 2f);
-			System.out.println("a");
 			addActor(unit);
 		}
 	}
@@ -56,7 +55,7 @@ public class CommonHorde {
 		return unitsList.size();
 	}
 	
-	public boolean isUnitInPos(int x, int y) {
+	public boolean isUnitInPos(int X, int Y, int w, int h, Actor testingActor) {
 		for(int i = 0; i < unitsList.size(); i++) {
 			Actor actor = unitsList.get(i);
 			
@@ -64,13 +63,16 @@ public class CommonHorde {
 			float posY = actor.getY();
 			float posX2 = actor.getWidth() + posX;
 			float posY2 = actor.getHeight() + posY;
+
+			System.out.println("Test in pos " + X + ":" + Y);
 			
-			x *= 32;
-			y *= 32;
-			x--;
-			y--;
+			int x = X * 32;
+			int y = Y * 32;
+
+			System.out.println("From " + ((posX - w) / 32) + ":" + ((posY - h) / 32) + " to " + (posX2 / 32) + ":" + (posY2 / 32));
 			
-			if(x >= posX && x <= posX2 && y >= posY && y <= posY2) {
+			if(x >= posX - w && x <= posX2 - 1 && y >= posY - h && y <= posY2 - 1 && actor != testingActor) {
+				System.out.println("Unit in pos " + (x / 32) + ":" + (y / 32) + " exist!");
 				return true;
 			}
 		}

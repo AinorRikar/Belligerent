@@ -62,7 +62,7 @@ public class PlayScene extends Scene {
 		horde = new CommonHorde();
 		MapManager.setHorde(horde);
 		
-		horde.createHorde(3);
+		horde.createHorde(20);
 		
 		s = "Null";
 		

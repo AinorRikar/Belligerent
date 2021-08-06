@@ -2,6 +2,7 @@ package com.sl.belligerent.core.world;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.sl.belligerent.core.hordes.CommonHorde;
 
 public class MapManager {
@@ -27,15 +28,23 @@ public class MapManager {
 		inst.horde = horde;
 	}
 	
-	public static boolean isCellMoveable(int x, int y) {
+	public static boolean isCellMoveableFor(int x, int y, int w, int h, Actor actor) {
+		w -= 32;
+		h -= 32;
+		
+		int uW = w / 32;
+		int uH = h / 32;
+		
 		TiledMapTileLayer layer = (TiledMapTileLayer)map.getMap().getLayers().get("Ground");
 		layer.getCell(x, y);
+		for(int i = 0; i <= uW; i++) {
+			for(int j = 0; j <= uH; j++) {
+				if(layer.getCell(x + i, y + j) == null) return false;
+			}
+		}
 		
-		if(layer.getCell(x, y) == null) return false;
-		
-		if(horde.isUnitInPos(x, y)) return false;
-		
-		return true;
+		if(horde.isUnitInPos(x, y, w, h, actor)) return false;
+		else return true;
 	}
 	
 	public static Vector2 getCurrentMapSize() {

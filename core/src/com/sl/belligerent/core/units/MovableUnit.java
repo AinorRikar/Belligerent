@@ -43,6 +43,7 @@ public class MovableUnit extends CommonUnit{
 		dest = new Vector2(0, 0);
 		dir = new Vector2(0, 0);
 		this.speed = speed;
+		setSize(64, 64);
 		spawn(0, 0, (int) MapManager.getCurrentMapSize().x, (int) MapManager.getCurrentMapSize().y);
 	}
 
@@ -55,9 +56,8 @@ public class MovableUnit extends CommonUnit{
 			x = minX + random.nextInt(maxX - minX);
 			y = minY + random.nextInt(maxY - minY);
 			pos = new Vector2(x, y);
-		} while(!MapManager.isCellMoveable((int) pos.x, (int) pos.y));
+		} while(!MapManager.isCellMoveableFor((int) pos.x, (int) pos.y, (int) getWidth(), (int) getHeight(), this));
 		setPosition(x * 32, y * 32);
-		setSize(64, 64);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class MovableUnit extends CommonUnit{
 		if(state >= 0 && state <= 3) {
 			Random random = new Random();
 			if(random.nextFloat() < 0.99) {
-				state = state;
+				
 			}
 			else
 			{
@@ -108,7 +108,8 @@ public class MovableUnit extends CommonUnit{
 	
 	protected void move(float dt, Vector2 dest, boolean start) {
 		boolean movementEnd = false;
-		if(!MapManager.isCellMoveable((int) dest.x, (int) dest.y) && start) {
+		
+		if(start && !MapManager.isCellMoveableFor((int) dest.x, (int) dest.y, (int) getWidth(), (int) getHeight(), this)) {
 			movementEnd = true;
 			state -= 4;
 			dir.x = 0;
@@ -144,6 +145,7 @@ public class MovableUnit extends CommonUnit{
 			this.dest.x = 0;
 			this.dest.y = 0;
 		}
+		
 		setPosition(pos.x * 32, pos.y * 32);
 	}
 	
