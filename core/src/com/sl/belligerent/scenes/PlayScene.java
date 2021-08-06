@@ -44,6 +44,7 @@ public class PlayScene extends Scene {
 
 	CommonUnit selected;
 	Map map;
+	CommonTexture sel;
 	
 	String s;
 	
@@ -62,7 +63,7 @@ public class PlayScene extends Scene {
 		horde = new CommonHorde();
 		MapManager.setHorde(horde);
 		
-		horde.createHorde(20);
+		horde.createHorde(15);
 		
 		s = "Null";
 		
@@ -87,6 +88,7 @@ public class PlayScene extends Scene {
 				if(a instanceof CommonUnit) {
 					System.out.println("OK");
 					selected = (CommonUnit) a;
+					sel = new CommonTexture("Textures/Sprites/selected.png", (int) a.getWidth(), (int) a.getHeight());
 					System.out.println(selected.getPos());
 					System.out.println(((Actor)selected).getX() + ":" + ((Actor)selected).getY());
 					s = ((CommonUnit)selected).getName() + " Position: " + selected.getPos();
@@ -94,6 +96,7 @@ public class PlayScene extends Scene {
 				}
 				else
 				{
+					selected = null;
 					s = "Null";
 					l.setText(s);
 				}
@@ -149,6 +152,10 @@ public class PlayScene extends Scene {
         stage.draw();
 
         batch.begin();
+        
+        if(selected != null) {
+        	batch.draw(sel.getTexture(), selected.getPos().x * 32, selected.getPos().y * 32);
+        }
         
         batch.end();
 	}

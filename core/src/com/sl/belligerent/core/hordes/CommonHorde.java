@@ -1,5 +1,6 @@
 package com.sl.belligerent.core.hordes;
 
+import java.util.Random;
 import java.util.Vector;
 
 import com.badlogic.gdx.math.Vector2;
@@ -23,11 +24,17 @@ public class CommonHorde {
 	};
 	
 	public void createHorde(int countOfUnits) {
-		StaticUnit building = new StaticUnit(new MultiTexture("Textures/Sprites/Units/main.png", 192, 192), "Main house", true);
+		StaticUnit building = new StaticUnit(new MultiTexture("Textures/Sprites/Units/main.png", 192, 192), "Main House", true);
 		addActor(building);
 		
 		for (int i = 0; i < countOfUnits; i++) {
-			MovableUnit unit = new MovableUnit(new MultiTexture("Textures/Sprites/Units/Mummai.png", 128, 128), "Mummai", 2f);
+			Random r = new Random();
+			int type = r.nextInt(2);
+			MovableUnit unit;
+			if(type == 0)
+				unit = new MovableUnit(new MultiTexture("Textures/Sprites/Units/Mummai.png", 128, 128), "Blue Mummai", 2f);
+			else
+				unit = new MovableUnit(new MultiTexture("Textures/Sprites/Units/Mummai_red.png", 128, 128), "Red Mummai", 2f);
 			addActor(unit);
 		}
 	}
@@ -63,16 +70,11 @@ public class CommonHorde {
 			float posY = actor.getY();
 			float posX2 = actor.getWidth() + posX;
 			float posY2 = actor.getHeight() + posY;
-
-			System.out.println("Test in pos " + X + ":" + Y);
 			
 			int x = X * 32;
 			int y = Y * 32;
-
-			System.out.println("From " + ((posX - w) / 32) + ":" + ((posY - h) / 32) + " to " + (posX2 / 32) + ":" + (posY2 / 32));
 			
 			if(x >= posX - w && x <= posX2 - 1 && y >= posY - h && y <= posY2 - 1 && actor != testingActor) {
-				System.out.println("Unit in pos " + (x / 32) + ":" + (y / 32) + " exist!");
 				return true;
 			}
 		}
