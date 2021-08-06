@@ -36,16 +36,19 @@ import com.sl.belligerent.core.textures.CommonTexture;
 import com.sl.belligerent.core.textures.MultiTexture;
 import com.sl.belligerent.core.units.CommonUnit;
 import com.sl.belligerent.core.units.MovableUnit;
+import com.sl.belligerent.core.units.StaticUnit;
 import com.sl.belligerent.core.world.Map;
 import com.sl.belligerent.core.world.MapManager;
 
 public class PlayScene extends Scene {
 
-	MovableUnit unit;
 	CommonUnit selected;
 	Map map;
 	
 	String s;
+	
+	Label l;
+	Image img;
 	
 	CommonHorde horde;
 	
@@ -57,22 +60,26 @@ public class PlayScene extends Scene {
 		MapManager.setMap(map);
 		
 		horde = new CommonHorde();
+		MapManager.setHorde(horde);
+		
+		horde.createHorde(3);
 		
 		s = "Null";
 		
-		unit = new MovableUnit(new MultiTexture("Textures/Sprites/Units/Mummai.png", 128, 128), 2f);
-		
-		horde.units.addActor(unit);
-		
 		stage.addActor(map);
-		stage.addActor(horde.units);
+		stage.addActor(horde.getGroup());
+		
+		img = new Image(new Texture(Gdx.files.internal("Textures/Sprites/Units/pou.png")));
+		img.setPosition(0, 0);
+		gui.addActor(img);
+		
+		l = new Label(s, new LabelStyle(game.fontSmall, Color.WHITE));
+		l.setPosition(100, 24);
+		gui.addActor(l);
 		
 		stage.addActor(gui);
-		Image img = new Image(new Texture(Gdx.files.internal("Textures/Sprites/Units/pou.png")));
-		img.setPosition(0, 0);
-		gui.add(img);
 		
-		camera.setPos(unit.getMapPos().x, unit.getMapPos().y, 0);
+		camera.setPos(horde.getCenter().x, horde.getCenter().y, 0);
 		
 		stage.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
@@ -82,12 +89,20 @@ public class PlayScene extends Scene {
 					selected = (CommonUnit) a;
 					System.out.println(selected.getPos());
 					System.out.println(((Actor)selected).getX() + ":" + ((Actor)selected).getY());
-					s = selected.toString() + " Position: " + selected.getPos();
+					s = ((CommonUnit)selected).getName() + " Position: " + selected.getPos();
+					l.setText(s);
 				}
 				else
 				{
 					s = "Null";
+					l.setText(s);
 				}
+			}
+		});
+		
+		img.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new MenuScene(game));
 			}
 		});
 	}
@@ -112,6 +127,10 @@ public class PlayScene extends Scene {
 	public void update(float delta) {
 		// TODO Auto-generated method stub
 		stage.act(delta);
+		if(selected instanceof CommonUnit) {
+			s = ((CommonUnit)selected).getName() + " Position: " + selected.getPos();
+			l.setText(s);
+		}
 	}
 
 	@Override
@@ -130,8 +149,6 @@ public class PlayScene extends Scene {
         stage.draw();
 
         batch.begin();
-        
-        game.fontSmall.draw(batch, s, 50, 50);
         
         batch.end();
 	}

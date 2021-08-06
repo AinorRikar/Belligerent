@@ -15,10 +15,13 @@ public abstract class CommonUnit extends Actor{
 	
 	protected float health;
 	
-	public CommonUnit(MultiTexture texture) {
+	protected String UnitName;
+	
+	public CommonUnit(MultiTexture texture, String name) {
 		super();
 		this.texture = texture;
 		state = 0;
+		UnitName = name;
 	}
 	
 	public Vector2 getMapPos() {
@@ -35,7 +38,14 @@ public abstract class CommonUnit extends Actor{
 		update(delta);
 	}
 	
+	public String getName()
+	{
+		return UnitName;
+	}
+	
 	public abstract void spawn(int minX, int minY, int maxX, int maxY);
 	
 	public abstract void update(float dt);
+	
+	public abstract void draw(Batch sb, float parentAlpha);
 }

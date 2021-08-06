@@ -17,12 +17,15 @@ import com.sl.belligerent.core.world.MapManager;
 public class MovableUnit extends CommonUnit{
 	/*
 	 * STATES
-	 * 0 - no action
+	 * 0 - no action up
+	 * 1 - no action down
+	 * 2 - no action left
+	 * 3 - no action right
 	 * 
-	 * 1 - move up
-	 * 2 - move down
-	 * 3 - move left
-	 * 4 - move right
+	 * 4 - move up
+	 * 5 - move down
+	 * 6 - move left
+	 * 7 - move right
 	 */
 	protected float speed;
 	protected Vector2 dest, dir;
@@ -35,8 +38,8 @@ public class MovableUnit extends CommonUnit{
 	protected float ag;
 	protected float in;
 	
-	public MovableUnit(MultiTexture texture, float speed) {
-		super(texture);
+	public MovableUnit(MultiTexture texture, String name, float speed) {
+		super(texture, name);
 		dest = new Vector2(0, 0);
 		dir = new Vector2(0, 0);
 		this.speed = speed;
@@ -60,38 +63,38 @@ public class MovableUnit extends CommonUnit{
 	@Override
 	public void update(float dt) {
 		// TODO Auto-generated method stub
-		if(state == 0) {
+		if(state >= 0 && state <= 3) {
 			Random random = new Random();
 			if(random.nextFloat() < 0.99) {
-				state = 0;
+				state = state;
 			}
 			else
 			{
 				randomMove(dt);
 			}
 		}
-		else if(state >= 1 && state <= 4) {
-			move(dt, dest);
+		else if(state >= 4 && state <= 7) {
+			move(dt, dest, false);
 		}
 	}
 	
 	protected void randomMove(float dt) {
 		Random random = new Random();
-		state = random.nextInt(4) + 1;
+		state = random.nextInt(4) + 4;
 		switch (state) {
-		case 1:
+		case 4:
 			dest.y = 1;
 			dir.y = 1;
 			break;
-		case 2:
+		case 5:
 			dest.y = -1;
 			dir.y = -1;
 			break;
-		case 3:
+		case 6:
 			dest.x = -1;
 			dir.x = -1;
 			break;
-		case 4:
+		case 7:
 			dest.x = 1;
 			dir.x = 1;
 			break;
@@ -100,33 +103,33 @@ public class MovableUnit extends CommonUnit{
 		dest.x += pos.x;
 		dest.y += pos.y;
 		
-		move(dt, dest);
+		move(dt, dest, true);
 	}
 	
-	protected void move(float dt, Vector2 dest) {
+	protected void move(float dt, Vector2 dest, boolean start) {
 		boolean movementEnd = false;
-		if(!MapManager.isCellMoveable((int) dest.x, (int) dest.y)) {
+		if(!MapManager.isCellMoveable((int) dest.x, (int) dest.y) && start) {
 			movementEnd = true;
-			state = 0;
+			state -= 4;
 			dir.x = 0;
 			dir.y = 0;
 			this.dest.x = 0;
 			this.dest.y = 0;
 			return;
 		}
-		if(state == 1 && pos.y > dest.y) {
+		if(state == 4 && pos.y > dest.y) {
 			pos = dest.cpy();
 			movementEnd = true;
 		}
-		else if(state == 2 && pos.y < dest.y) {
+		else if(state == 5 && pos.y < dest.y) {
 			pos = dest.cpy();
 			movementEnd = true;
 		}
-		else if(state == 3 && pos.x < dest.x) {
+		else if(state == 6 && pos.x < dest.x) {
 			pos = dest.cpy();
 			movementEnd = true;
 		}
-		else if(state == 4 && pos.x > dest.x) {
+		else if(state == 7 && pos.x > dest.x) {
 			pos = dest.cpy();
 			movementEnd = true;
 		}
@@ -135,7 +138,7 @@ public class MovableUnit extends CommonUnit{
 			pos.add(dir.cpy().scl(speed * dt));
 		}
 		else {
-			state = 0;
+			state -= 4;
 			dir.x = 0;
 			dir.y = 0;
 			this.dest.x = 0;
@@ -152,17 +155,17 @@ public class MovableUnit extends CommonUnit{
 	
 	public TextureRegion getCurReg() {
 		TextureRegion tr = texture.getTextureRegion(0, 0, 64, 64);
-		switch (state) {
-		case 1:
+		switch (state % 4) {
+		case 0:
 			tr = texture.getTextureRegion(64, 64, 64, 64);
 			break;
-		case 2:
+		case 1:
 			tr = texture.getTextureRegion(0, 0, 64, 64);
 			break;
-		case 3:
+		case 2:
 			tr = texture.getTextureRegion(64, 0, 64, 64);
 			break;
-		case 4:
+		case 3:
 			tr = texture.getTextureRegion(0, 64, 64, 64);
 			break;
 		}
