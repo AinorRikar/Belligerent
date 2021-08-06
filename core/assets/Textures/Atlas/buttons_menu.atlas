@@ -1,0 +1,20 @@
+
+buttons_menu.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+exit_button
+  rotate: false
+  xy: 2, 245
+  size: 880, 350
+  orig: 880, 350
+  offset: 0, 0
+  index: -1
+start_button
+  rotate: false
+  xy: 2, 2
+  size: 820, 241
+  orig: 820, 241
+  offset: 0, 0
+  index: -1

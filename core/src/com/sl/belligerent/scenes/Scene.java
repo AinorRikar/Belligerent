@@ -11,9 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.sl.belligerent.GameCore;
 import com.sl.belligerent.core.camera.CommonCamera;
+import com.sl.belligerent.core.gui.GUIGroup;
 
 public abstract class Scene implements Screen {
-	final GameCore game;
+	final protected GameCore game;
 	
 	protected CommonCamera camera;
 	protected Vector3 mouse;
@@ -21,6 +22,8 @@ public abstract class Scene implements Screen {
 	protected SpriteBatch batch;
 	
 	protected Stage stage;
+	
+	protected GUIGroup gui;
 	
 	protected boolean isScenePaused = false;
 	
@@ -34,6 +37,7 @@ public abstract class Scene implements Screen {
 		this.batch = game.batch;
 		stage = new Stage(new FillViewport(GameCore.WIDTH, GameCore.HEIGHT, this.camera.getCamera()), batch);
 		Gdx.input.setInputProcessor(stage);
+		gui = new GUIGroup(camera);
 	}
 	
 	public abstract void handleInput();

@@ -2,12 +2,17 @@ package com.sl.belligerent.core.units;
 
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sl.belligerent.core.textures.CommonTexture;
+import com.sl.belligerent.core.textures.MultiTexture;
+import com.sl.belligerent.core.world.MapManager;
 
 public class MovableUnit extends CommonUnit{
 	/*
@@ -30,21 +35,24 @@ public class MovableUnit extends CommonUnit{
 	protected float ag;
 	protected float in;
 	
-	public MovableUnit(CommonTexture texture, float speed) {
+	public MovableUnit(MultiTexture texture, float speed) {
 		super(texture);
 		dest = new Vector2(0, 0);
 		dir = new Vector2(0, 0);
 		this.speed = speed;
-		spawn(0, 0, 5, 5);
+		spawn(0, 0, (int) MapManager.getCurrentMapSize().x, (int) MapManager.getCurrentMapSize().y);
 	}
 
 	@Override
 	public void spawn(int minX, int minY, int maxX, int maxY) {
 		// TODO Auto-generated method stub
 		Random random = new Random();
-		int x = minX + random.nextInt(maxX - minX);
-		int y = minY + random.nextInt(maxY - minY);
-		pos = new Vector2(x, y);
+		int x, y;
+		do {
+			x = minX + random.nextInt(maxX - minX);
+			y = minY + random.nextInt(maxY - minY);
+			pos = new Vector2(x, y);
+		} while(!MapManager.isCellMoveable((int) pos.x, (int) pos.y));
 		setPosition(x * 32, y * 32);
 		setSize(64, 64);
 	}
@@ -97,6 +105,15 @@ public class MovableUnit extends CommonUnit{
 	
 	protected void move(float dt, Vector2 dest) {
 		boolean movementEnd = false;
+		if(!MapManager.isCellMoveable((int) dest.x, (int) dest.y)) {
+			movementEnd = true;
+			state = 0;
+			dir.x = 0;
+			dir.y = 0;
+			this.dest.x = 0;
+			this.dest.y = 0;
+			return;
+		}
 		if(state == 1 && pos.y > dest.y) {
 			pos = dest.cpy();
 			movementEnd = true;
@@ -125,5 +142,30 @@ public class MovableUnit extends CommonUnit{
 			this.dest.y = 0;
 		}
 		setPosition(pos.x * 32, pos.y * 32);
+	}
+	
+	@Override
+	public void draw(Batch sb, float parentAlpha) {
+		sb.setColor(1, 1, 1, parentAlpha);
+		sb.draw(getCurReg(), getX(), getY());
+	}
+	
+	public TextureRegion getCurReg() {
+		TextureRegion tr = texture.getTextureRegion(0, 0, 64, 64);
+		switch (state) {
+		case 1:
+			tr = texture.getTextureRegion(64, 64, 64, 64);
+			break;
+		case 2:
+			tr = texture.getTextureRegion(0, 0, 64, 64);
+			break;
+		case 3:
+			tr = texture.getTextureRegion(64, 0, 64, 64);
+			break;
+		case 4:
+			tr = texture.getTextureRegion(0, 64, 64, 64);
+			break;
+		}
+		return tr;
 	}
 }

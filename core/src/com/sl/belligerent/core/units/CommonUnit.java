@@ -6,15 +6,16 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.sl.belligerent.core.textures.CommonTexture;
+import com.sl.belligerent.core.textures.MultiTexture;
 
 public abstract class CommonUnit extends Actor{
 	protected Vector2 pos;
-	protected CommonTexture texture;
+	protected MultiTexture texture;
 	public int state;
 	
 	protected float health;
 	
-	public CommonUnit(CommonTexture texture) {
+	public CommonUnit(MultiTexture texture) {
 		super();
 		this.texture = texture;
 		state = 0;
@@ -26,12 +27,6 @@ public abstract class CommonUnit extends Actor{
 	
 	public Vector2 getPos() {
 		return new Vector2(pos.x, pos.y);
-	}
-	
-	@Override
-	public void draw(Batch sb, float parentAlpha) {
-		sb.setColor(1, 1, 1, parentAlpha);
-		sb.draw(texture.getTexture(), getX(), getY());
 	}
 	
 	@Override

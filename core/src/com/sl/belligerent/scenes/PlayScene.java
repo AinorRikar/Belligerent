@@ -1,8 +1,14 @@
 package com.sl.belligerent.scenes;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,15 +20,24 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sl.belligerent.GameCore;
 import com.sl.belligerent.core.hordes.CommonHorde;
 import com.sl.belligerent.core.textures.CommonTexture;
+import com.sl.belligerent.core.textures.MultiTexture;
 import com.sl.belligerent.core.units.CommonUnit;
 import com.sl.belligerent.core.units.MovableUnit;
 import com.sl.belligerent.core.world.Map;
+import com.sl.belligerent.core.world.MapManager;
 
 public class PlayScene extends Scene {
 
@@ -34,22 +49,30 @@ public class PlayScene extends Scene {
 	
 	CommonHorde horde;
 	
-	public PlayScene(GameCore game) {
+	public PlayScene(final GameCore game) {
 		super(game);
 		// TODO Auto-generated constructor stub
 		map = new Map();
 		map.createLevel("Maps/BasicVillage.tmx", camera.getCamera());
+		MapManager.setMap(map);
 		
 		horde = new CommonHorde();
 		
 		s = "Null";
 		
-		unit = new MovableUnit(new CommonTexture("Textures/Sprites/Units/pou.png", 64, 64), 2f);
+		unit = new MovableUnit(new MultiTexture("Textures/Sprites/Units/Mummai.png", 128, 128), 2f);
 		
 		horde.units.addActor(unit);
 		
 		stage.addActor(map);
 		stage.addActor(horde.units);
+		
+		stage.addActor(gui);
+		Image img = new Image(new Texture(Gdx.files.internal("Textures/Sprites/Units/pou.png")));
+		img.setPosition(0, 0);
+		gui.add(img);
+		
+		camera.setPos(unit.getMapPos().x, unit.getMapPos().y, 0);
 		
 		stage.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {

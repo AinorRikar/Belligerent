@@ -10,17 +10,58 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.sl.belligerent.GameCore;
 import com.sl.belligerent.core.textures.CommonTexture;
+import com.sl.belligerent.core.units.CommonUnit;
 
 public class MenuScene extends Scene {
 
-	public MenuScene(GameCore game) {
+	ImageButton start, exit;
+	
+	public MenuScene(final GameCore game) {
 		super(game);
 		// TODO Auto-generated constructor stub
+		Skin skin = new Skin();
+		TextureAtlas btnAtlas = new TextureAtlas(Gdx.files.internal("Textures/Atlas/buttons_menu.atlas"));
+		skin.addRegions(btnAtlas);
+		
+		ImageButtonStyle styleStart = new ImageButtonStyle();
+		styleStart.up = skin.getDrawable("start_button");
+		styleStart.down = skin.getDrawable("start_button");
+		styleStart.checked = skin.getDrawable("start_button");
+		start = new ImageButton(styleStart);
+		
+		ImageButtonStyle styleExit = new ImageButtonStyle();
+		styleExit.up = skin.getDrawable("exit_button");
+		styleExit.down = skin.getDrawable("exit_button");
+		styleExit.checked = skin.getDrawable("exit_button");
+		exit = new ImageButton(styleExit);
+		
+		start.setPosition(35, 350);
+		exit.setPosition(0, 50);
+		stage.addActor(start);
+		stage.addActor(exit);
+		
+		start.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new PlayScene(game));
+			}
+		});
+		exit.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				Gdx.app.exit();
+			}
+		});
 	}
 
 	@Override
@@ -31,10 +72,7 @@ public class MenuScene extends Scene {
 
 	@Override
 	public void handleInput() {
-		// TODO Auto-generated method stub
-		if(Gdx.input.justTouched()) {
-			game.setScreen(new PlayScene(game));
-		}
+		
 	}
 
 	@Override
@@ -53,11 +91,14 @@ public class MenuScene extends Scene {
         
         camera.update();
         game.batch.setProjectionMatrix(camera.getCamera().combined);
+        
+        stage.act(delta);
+        
+        stage.draw();
 
         batch.begin();
         
         game.fontMain.draw(batch, "BELLIGERENT", 100, game.HEIGHT - 100);
-        game.fontSmall.draw(batch, "Click anywhere to start!", 100, game.HEIGHT - 200);
         
         batch.end();
 	}
