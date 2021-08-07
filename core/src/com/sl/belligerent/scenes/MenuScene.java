@@ -1,32 +1,22 @@
 package com.sl.belligerent.scenes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.assets.loaders.ShaderProgramLoader;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g3d.Shader;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.sl.belligerent.GameCore;
-import com.sl.belligerent.core.textures.CommonTexture;
-import com.sl.belligerent.core.units.CommonUnit;
 
 public class MenuScene extends Scene {
 
-	ImageButton start, exit;
+	ImageButton start, exit, sett;
+	Music m;
+	Sound click;
 	
 	public MenuScene(final GameCore game) {
 		super(game);
@@ -37,31 +27,56 @@ public class MenuScene extends Scene {
 		
 		ImageButtonStyle styleStart = new ImageButtonStyle();
 		styleStart.up = skin.getDrawable("start_button");
-		styleStart.down = skin.getDrawable("start_button");
-		styleStart.checked = skin.getDrawable("start_button");
+		styleStart.down = skin.getDrawable("start_button_pressed");
+		styleStart.checked = skin.getDrawable("start_button_pressed");
 		start = new ImageButton(styleStart);
+		
+		ImageButtonStyle styleSet = new ImageButtonStyle();
+		styleSet.up = skin.getDrawable("settings_button");
+		styleSet.down = skin.getDrawable("settings_button_pressed");
+		styleSet.checked = skin.getDrawable("settings_button");
+		sett = new ImageButton(styleSet);
 		
 		ImageButtonStyle styleExit = new ImageButtonStyle();
 		styleExit.up = skin.getDrawable("exit_button");
-		styleExit.down = skin.getDrawable("exit_button");
-		styleExit.checked = skin.getDrawable("exit_button");
+		styleExit.down = skin.getDrawable("exit_button_pressed");
+		styleExit.checked = skin.getDrawable("exit_button_pressed");
 		exit = new ImageButton(styleExit);
 		
-		start.setPosition(35, 350);
-		exit.setPosition(0, 50);
+		start.setPosition(50, 500);
+		sett.setPosition(50, 300);
+		exit.setPosition(50, 100);
 		stage.addActor(start);
+		stage.addActor(sett);
 		stage.addActor(exit);
+		
+		click = Gdx.audio.newSound(Gdx.files.internal("Sounds/Effects/DiClick.mp3"));
 		
 		start.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
+				click.play();
+				m.stop();
 				game.setScreen(new PlayScene(game));
 			}
 		});
+		
+		sett.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				click.play();
+			}
+		});
+		
 		exit.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
+				click.play();
 				Gdx.app.exit();
 			}
 		});
+		
+		m = Gdx.audio.newMusic(Gdx.files.internal("Sounds/Music/menu.mp3"));
+		m.setVolume(0.5f);
+		m.setLooping(true);
+		m.play();
 	}
 
 	@Override
@@ -98,7 +113,8 @@ public class MenuScene extends Scene {
 
         batch.begin();
         
-        game.fontMain.draw(batch, "BELLIGERENT", 100, game.HEIGHT - 100);
+        game.fontMain.draw(batch, "BELLIGERENT", 100, GameCore.HEIGHT - 100);
+        game.fontSmall.draw(batch, "by SL team", 100, GameCore.HEIGHT - 200);
         
         batch.end();
 	}

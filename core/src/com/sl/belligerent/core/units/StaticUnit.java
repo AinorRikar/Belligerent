@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.sl.belligerent.core.hordes.CommonHorde;
 import com.sl.belligerent.core.textures.MultiTexture;
 import com.sl.belligerent.core.world.MapManager;
 
@@ -12,12 +13,13 @@ public class StaticUnit extends CommonUnit{
 	
 	private boolean isMain;
 
-	public StaticUnit(MultiTexture texture, String name, boolean isMain) {
-		super(texture, name);
+	public StaticUnit(MultiTexture texture, String name, CommonHorde horde, boolean isMain) {
+		super(texture, name, horde);
 		// TODO Auto-generated constructor stub
 		this.isMain = isMain;
 		setSize(192, 192);
 		spawn(0, 0, (int) MapManager.getCurrentMapSize().x, (int) MapManager.getCurrentMapSize().y);
+		health = 1000;
 	}
 
 	@Override

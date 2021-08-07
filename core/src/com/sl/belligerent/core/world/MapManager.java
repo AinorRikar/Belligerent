@@ -3,14 +3,18 @@ package com.sl.belligerent.core.world;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.sl.belligerent.core.controllers.JobController;
 import com.sl.belligerent.core.hordes.CommonHorde;
 
 public class MapManager {
 	
 	private static MapManager inst = new MapManager();
 	
+	private static JobController jc = new JobController();
+	
+	private static Vector2 outPos;
+	
 	private static Map map;
-	private static CommonHorde horde;
 	
 	private MapManager () {
 		
@@ -20,12 +24,20 @@ public class MapManager {
 		return inst;
 	}
 	
+	public static void update(float dt) {
+		
+	}
+	
 	public static void setMap(Map map) {
 		inst.map = map;
 	}
 	
-	public static void setHorde(CommonHorde horde) {
-		inst.horde = horde;
+	public static void setOutPos(Vector2 pos) {
+		inst.outPos = pos;
+	}
+	
+	public static Vector2 getOutPos() {
+		return inst.outPos;
 	}
 	
 	public static boolean isCellMoveableFor(int x, int y, int w, int h, Actor actor) {
@@ -43,7 +55,7 @@ public class MapManager {
 			}
 		}
 		
-		if(horde.isUnitInPos(x, y, w, h, actor)) return false;
+		if(map.isUnitInPos(x, y, w, h, actor)) return false;
 		else return true;
 	}
 	
@@ -51,5 +63,13 @@ public class MapManager {
 		return new Vector2(
 				((TiledMapTileLayer)map.getMap().getLayers().get(0)).getWidth(), 
 				((TiledMapTileLayer)map.getMap().getLayers().get(0)).getHeight());
+	}
+	
+	public static void addUnit(Actor actor) {
+		map.addUnit(actor);
+	}
+	
+	public static void removeUnit(Actor actor) {
+		map.removeUnit(actor);
 	}
 }

@@ -7,36 +7,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.sl.belligerent.GameCore;
 import com.sl.belligerent.core.hordes.CommonHorde;
 import com.sl.belligerent.core.textures.CommonTexture;
 import com.sl.belligerent.core.textures.MultiTexture;
 import com.sl.belligerent.core.units.CommonUnit;
 import com.sl.belligerent.core.units.MovableUnit;
-import com.sl.belligerent.core.units.StaticUnit;
 import com.sl.belligerent.core.world.Map;
 import com.sl.belligerent.core.world.MapManager;
 
@@ -48,10 +36,12 @@ public class PlayScene extends Scene {
 	
 	String s;
 	
-	Label l;
+	Label l, l2, l3, l4;
 	Image img;
 	
 	CommonHorde horde;
+	
+	Music m;
 	
 	public PlayScene(final GameCore game) {
 		super(game);
@@ -61,11 +51,10 @@ public class PlayScene extends Scene {
 		MapManager.setMap(map);
 		
 		horde = new CommonHorde();
-		MapManager.setHorde(horde);
 		
 		horde.createHorde(15);
 		
-		s = "Null";
+		s = "";
 		
 		stage.addActor(map);
 		stage.addActor(horde.getGroup());
@@ -75,12 +64,40 @@ public class PlayScene extends Scene {
 		gui.addActor(img);
 		
 		l = new Label(s, new LabelStyle(game.fontSmall, Color.WHITE));
-		l.setPosition(100, 24);
+		l.setPosition(100, 30);
+		l2 = new Label(s, new LabelStyle(game.fontSmall, Color.WHITE));
+		l2.setPosition(280, 40);
+		l3 = new Label(s, new LabelStyle(game.fontSmall, Color.WHITE));
+		l3.setPosition(400, 40);
+		l4 = new Label(s, new LabelStyle(game.fontSmall, Color.WHITE));
+		l4.setPosition(10, GameCore.HEIGHT - 40);
 		gui.addActor(l);
+		gui.addActor(l2);
+		gui.addActor(l3);
+		gui.addActor(l4);
 		
 		stage.addActor(gui);
 		
-		camera.setPos(horde.getCenter().x, horde.getCenter().y, 0);
+		camera.setPos(MapManager.getCurrentMapSize().x * 32 / 2, MapManager.getCurrentMapSize().y * 32 / 2, 0);
+		
+		stage.addListener(new InputListener() {
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				// TODO Auto-generated method stub
+				if(keycode == Keys.FORWARD_DEL) {
+					if(selected != null && selected instanceof MovableUnit) {
+						Actor a = (Actor) selected;
+						horde.removeActor(a);
+						selected = null;
+					}
+				}
+				if(keycode == Keys.ENTER) {
+					MovableUnit unit = new MovableUnit(new MultiTexture("Textures/Sprites/Units/Mummai.png", 128, 128), "Blue Mummai", horde, 2f);
+					horde.addActor(unit);
+				}
+				return super.keyDown(event, keycode);
+			}
+		});
 		
 		stage.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
@@ -91,23 +108,29 @@ public class PlayScene extends Scene {
 					sel = new CommonTexture("Textures/Sprites/selected.png", (int) a.getWidth(), (int) a.getHeight());
 					System.out.println(selected.getPos());
 					System.out.println(((Actor)selected).getX() + ":" + ((Actor)selected).getY());
-					s = ((CommonUnit)selected).getName() + " Position: " + selected.getPos();
-					l.setText(s);
 				}
 				else
 				{
 					selected = null;
-					s = "Null";
+					s = "";
 					l.setText(s);
+					l2.setText(s);
+					l3.setText(s);
 				}
 			}
 		});
 		
 		img.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
+				m.stop();
 				game.setScreen(new MenuScene(game));
 			}
 		});
+		
+		m = Gdx.audio.newMusic(Gdx.files.internal("Sounds/Music/game.mp3"));
+		m.setVolume(0.5f);
+		m.setLooping(true);
+		m.play();
 	}
 
 	@Override
@@ -129,10 +152,29 @@ public class PlayScene extends Scene {
 	@Override
 	public void update(float delta) {
 		// TODO Auto-generated method stub
+		MapManager.update(delta);
 		stage.act(delta);
+		
+		l4.setText("Stones: " + horde.getStones() + "\nLogs: " + horde.getLogs() + "\nMeat: " + horde.getMeat() + "\nHerbs: " + horde.getHerbs());
+		
 		if(selected instanceof CommonUnit) {
-			s = ((CommonUnit)selected).getName() + " Position: " + selected.getPos();
+			s = ((CommonUnit)selected).getName() + "\nPosition: " + selected.getPos() + "\nHealth: " + ((CommonUnit)selected).getHP();
 			l.setText(s);
+		}
+		else
+		{
+			l.setText("");
+		}
+		if(selected instanceof MovableUnit) {
+			s = "\nStamina: " + ((MovableUnit)selected).getStamina() + "\nHunger: " + ((MovableUnit)selected).getHunger() + "\nMoral: " + ((MovableUnit)selected).getMoral();
+			l2.setText(s);
+			s = "\nStr: " + ((MovableUnit)selected).getStr() + "\nAg: " + ((MovableUnit)selected).getAg() + "\nIn: " + ((MovableUnit)selected).getIn();
+			l3.setText(s);
+		}
+		else
+		{
+			l2.setText("");
+			l3.setText("");
 		}
 	}
 
@@ -144,10 +186,10 @@ public class PlayScene extends Scene {
         
         handleInput();
         
-        camera.update();
-        //game.batch.setProjectionMatrix(camera.getCamera().combined);
-        
         update(delta);
+        
+        camera.update();
+        game.batch.setProjectionMatrix(camera.getCamera().combined);
         
         stage.draw();
 

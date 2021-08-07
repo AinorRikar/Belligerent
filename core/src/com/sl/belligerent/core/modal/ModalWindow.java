@@ -3,8 +3,11 @@ package com.sl.belligerent.core.modal;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Group;
 
-public abstract class ModalWindow {
+public class ModalWindow {
+	protected Group group;
+	
 	protected Texture bg;
 	protected BitmapFont font;
 	protected String title;
@@ -13,6 +16,4 @@ public abstract class ModalWindow {
 		this.title = title;
 		this.bg = tex;
 	}
-
-	public abstract void render(SpriteBatch sb);
 }
